@@ -293,7 +293,7 @@ protected:
     bool randomize_on_restarts, fixed_randomize_on_restarts, newDescent;
     uint32_t randomDescentAssignments;
     bool forceUnsatOnNewDescent;
-    bool setCustomScore;
+    //bool setCustomScore;
     // Helper structures:
     //
     struct VarData { CRef reason; int level; };

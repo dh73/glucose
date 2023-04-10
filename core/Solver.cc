@@ -119,7 +119,7 @@ static BoolOption opt_adapt(_cat, "adapt", "Adapt dynamically stategies after 10
 
 static BoolOption opt_forceunsat(_cat,"forceunsat","Force the phase for UNSAT",true);
 
-static BoolOption partitions(_cat, "partitions", "[Experimental] Guiding VSIDS with custom literal scores.", false);
+//static BoolOption partitions(_cat, "partitions", "[Experimental] Guiding VSIDS with custom literal scores.", false);
 //=================================================================================================
 // Constructor/Destructor:
 
@@ -172,7 +172,7 @@ verbosity(0)
 , newDescent(0)
 , randomDescentAssignments(0)
 , forceUnsatOnNewDescent(opt_forceunsat)
-, setCustomScore(partitions)
+//, setCustomScore(partitions)
 
 , ok(true)
 , cla_inc(1)
@@ -1496,9 +1496,9 @@ lbool Solver::search(int nof_conflicts) {
                 return l_Undef;
             }
 
-            if(setCustomScore) {
+            /*if(setCustomScore) {
                 customScore(file);
-            }
+            }*/
 
             trailQueue.push(trail.size());
             // BLOCK RESTART (CP 2012 paper)
