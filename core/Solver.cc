@@ -119,7 +119,7 @@ static BoolOption opt_adapt(_cat, "adapt", "Adapt dynamically stategies after 10
 
 static BoolOption opt_forceunsat(_cat,"forceunsat","Force the phase for UNSAT",true);
 
-//static BoolOption partitions(_cat, "partitions", "[Experimental] Guiding VSIDS with custom literal scores.", false);
+static StringOption partitions(_cat, "partitions", "[Experimental] Guiding VSIDS with custom literal scores.");
 //=================================================================================================
 // Constructor/Destructor:
 
@@ -172,7 +172,7 @@ verbosity(0)
 , newDescent(0)
 , randomDescentAssignments(0)
 , forceUnsatOnNewDescent(opt_forceunsat)
-//, setCustomScore(partitions)
+, setCustomScore(partitions)
 
 , ok(true)
 , cla_inc(1)
@@ -1496,9 +1496,9 @@ lbool Solver::search(int nof_conflicts) {
                 return l_Undef;
             }
 
-            /*if(setCustomScore) {
-                customScore(file);
-            }*/
+            if(setCustomScore != NULL) {
+                customScore(partitions);
+            }
 
             trailQueue.push(trail.size());
             // BLOCK RESTART (CP 2012 paper)
@@ -1816,9 +1816,6 @@ lbool Solver::solve_(bool do_simp, bool turn_off_simp) // Parameters are useless
 }
 
 
-
-
-
 //=================================================================================================
 // Writing CNF to DIMACS:
 //
@@ -2001,9 +1998,13 @@ void Solver::customScore(const char* file) {
     std::ifstream infile(file);
     int var, score;
 
-    while (infile >> var >> score) {
-        var_scores[score].push_back(var);
-    }
+    if(file == NULL) {
+    	fprintf(stderr, "could not open file %s\n", file), exit(1);
+    } else {
+    	while (infile >> var >> score) {
+        	var_scores[score].push_back(var);
+    	}
+   }
 
     // Print debug information
     printf("c Loaded partitioned score literal variable data:\n");

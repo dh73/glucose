@@ -152,11 +152,6 @@ int main(int argc, char** argv)
 
         S.parsing = 1;
         S.use_simplification = pre;
-
-        if (*partitions) {
-            S.customScore(partitions);
-        }
-
         //if (!pre) S.eliminate(true);
 
         S.verbosity = verb;
@@ -183,6 +178,10 @@ int main(int argc, char** argv)
         // interrupts:
         signal(SIGINT, SIGINT_exit);
         signal(SIGXCPU,SIGINT_exit);
+
+        if (*partitions) {
+            S.customScore(partitions);
+        }
 
 
         // Set limit on CPU-time:
@@ -237,12 +236,12 @@ int main(int argc, char** argv)
 
         S.parsing = 0;
         if(pre/* && !S.isIncremental()*/) {
-	  printf("c | Preprocesing is fully done\n");
-	  S.eliminate(true);
+	    printf("c | Preprocesing is fully done\n");
+	    S.eliminate(true);
         double simplified_time = cpuTime();
         if (S.verbosity > 0){
             printf("c |  Simplification time:  %12.2f s                                                                 |\n", simplified_time - parsed_time);
- }
+        }
 	}
 	printf("c |                                                                                                       |\n");
         if (!S.okay()){

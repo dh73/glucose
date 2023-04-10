@@ -277,6 +277,7 @@ public:
     // Important stats completely related to search. Keep here
     uint64_t solves,starts,decisions,propagations,conflicts,conflictsRestarts;
 
+    // Partition reading
     std::map<int, std::vector<int>> var_scores;
     void customScore (const char* file);
 
@@ -293,7 +294,7 @@ protected:
     bool randomize_on_restarts, fixed_randomize_on_restarts, newDescent;
     uint32_t randomDescentAssignments;
     bool forceUnsatOnNewDescent;
-    //bool setCustomScore;
+    const char* setCustomScore;
     // Helper structures:
     //
     struct VarData { CRef reason; int level; };
