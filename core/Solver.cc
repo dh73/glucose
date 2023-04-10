@@ -118,6 +118,8 @@ static BoolOption opt_fixed_randomize_phase_on_restarts(_cat, "fix-phas-rest", "
 static BoolOption opt_adapt(_cat, "adapt", "Adapt dynamically stategies after 100000 conflicts", true);
 
 static BoolOption opt_forceunsat(_cat,"forceunsat","Force the phase for UNSAT",true);
+
+static BoolOption partitions(_cat, "partitions", "[Experimental] Guiding VSIDS with custom literal scores.", false);
 //=================================================================================================
 // Constructor/Destructor:
 
@@ -170,6 +172,7 @@ verbosity(0)
 , newDescent(0)
 , randomDescentAssignments(0)
 , forceUnsatOnNewDescent(opt_forceunsat)
+, setCustomScore(partitions)
 
 , ok(true)
 , cla_inc(1)
@@ -1221,7 +1224,7 @@ void Solver::reduceDB() {
     // Don't delete binary or locked clauses. From the rest, delete clauses from the first half
     // Keep clauses which seem to be usefull (their lbd was reduce during this sequence)
 
-    int limit = (learnts.size() / 2); // 
+    int limit = (learnts.size() / 2); //
 
     for(i = j = 0; i < learnts.size(); i++) {
         Clause &c = ca[learnts[i]];
@@ -1491,6 +1494,10 @@ lbool Solver::search(int nof_conflicts) {
                 adaptSolver();
                 adaptStrategies = false;
                 return l_Undef;
+            }
+
+            if(setCustomScore) {
+                customScore(file);
             }
 
             trailQueue.push(trail.size());
@@ -1988,4 +1995,23 @@ bool Solver::parallelJobIsFinished() {
 
 
 void Solver::parallelImportClauseDuringConflictAnalysis(Clause &, CRef ) {
+}
+
+void Solver::customScore(const char* file) {
+    std::ifstream infile(file);
+    int var, score;
+
+    while (infile >> var >> score) {
+        var_scores[score].push_back(var);
+    }
+
+    // Print debug information
+    printf("c Loaded partitioned score literal variable data:\n");
+    for (const auto& entry : var_scores) {
+        printf("c Score %d: ", entry.first);
+        for (const auto& var : entry.second) {
+            printf("%d ", var);
+        }
+        printf("\n");
+    }
 }

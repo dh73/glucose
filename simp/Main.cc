@@ -142,8 +142,6 @@ int main(int argc, char** argv)
         StringOption  opt_certified_file      (_certified, "certified-output",    "Certified UNSAT output file", "NULL");
         BoolOption    opt_vbyte             (_certified, "vbyte",    "Emit proof in variable-byte encoding", false);
 
-        StringOption partitions ("MAIN", "partitions", "[Experimental] Guiding VSIDS with custom literal scores." );
-
         parseOptions(argc, argv, true);
 
         SimpSolver  S;
