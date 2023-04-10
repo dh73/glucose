@@ -142,8 +142,7 @@ int main(int argc, char** argv)
         StringOption  opt_certified_file      (_certified, "certified-output",    "Certified UNSAT output file", "NULL");
         BoolOption    opt_vbyte             (_certified, "vbyte",    "Emit proof in variable-byte encoding", false);
 
-        StringOption partitions("MAIN", "partitions", "[Experimental] Guiding VSIDS with custom literal scores.", "");
-
+        StringOption partitions("MAIN", "partitions", "[Experimental] Guiding VSIDS with custom literal scores.", "NULL");
 
         parseOptions(argc, argv, true);
 
@@ -179,10 +178,9 @@ int main(int argc, char** argv)
         signal(SIGINT, SIGINT_exit);
         signal(SIGXCPU,SIGINT_exit);
 
-        if (*partitions) {
+        if (partitions) {
             S.customScore(partitions);
         }
-
 
         // Set limit on CPU-time:
         if (cpu_lim != INT32_MAX){

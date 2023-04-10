@@ -160,7 +160,7 @@ verbosity(0)
 , panicModeLastRemoved(0), panicModeLastRemovedShared(0)
 , useUnaryWatched(false)
 , promoteOneWatchedClause(true)
-,solves(0),starts(0),decisions(0),propagations(0),conflicts(0),conflictsRestarts(0)
+, solves(0),starts(0),decisions(0),propagations(0),conflicts(0),conflictsRestarts(0)
 , curRestart(1)
 , glureduce(opt_glu_reduction)
 , restart_inc(opt_restart_inc)
@@ -1998,14 +1998,13 @@ void Solver::customScore(const char* file) {
     std::ifstream infile(file);
     int var, score;
 
-    if(file == NULL) {
-    	fprintf(stderr, "could not open file %s\n", file), exit(1);
+    if(!infile.is_open()) {
+    	fprintf(stderr, "[Custom Score] Could not open file %s\n", file), exit(1);
     } else {
     	while (infile >> var >> score) {
         	var_scores[score].push_back(var);
     	}
    }
-
     // Print debug information
     printf("c Loaded partitioned score literal variable data:\n");
     for (const auto& entry : var_scores) {
